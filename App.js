@@ -11,6 +11,7 @@ import {
   Text,
   View
 } from 'react-native';
+import IM from './src/services/IM';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' +
@@ -21,6 +22,20 @@ const instructions = Platform.select({
 
 type Props = {};
 export default class App extends Component<Props> {
+
+  componentDidMount() {
+    IM.init()
+      .then(() => {
+        return IM.createConversation(['bruce']);
+      })
+      .then((conv) => {
+        console.log(conv);
+      })
+      .catch((error)=>{
+        console.warn(error);
+      })
+  }
+
   render() {
     return (
       <View style={styles.container}>
