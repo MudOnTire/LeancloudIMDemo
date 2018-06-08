@@ -12,6 +12,7 @@ import {
   View
 } from 'react-native';
 import IM from './src/services/IM';
+import Chat from './src/scenes/Chat';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' +
@@ -31,7 +32,7 @@ export default class App extends Component<Props> {
       .then((conv) => {
         console.log(conv);
       })
-      .catch((error)=>{
+      .catch((error) => {
         console.warn(error);
       })
   }
@@ -39,15 +40,7 @@ export default class App extends Component<Props> {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit App.js
-        </Text>
-        <Text style={styles.instructions}>
-          {instructions}
-        </Text>
+        <Chat />
       </View>
     );
   }
@@ -58,7 +51,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    backgroundColor: '#ff0000',
   },
   welcome: {
     fontSize: 20,
