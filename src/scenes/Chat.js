@@ -9,6 +9,7 @@ import {
 import { GiftedChat, Actions, Bubble, SystemMessage } from 'react-native-gifted-chat';
 import CustomActions from './CustomActions';
 import CustomView from './CustomView';
+import Messages from '../models/messages';
 
 export default class Example extends React.Component {
   constructor(props) {
@@ -36,7 +37,7 @@ export default class Example extends React.Component {
     this._isMounted = true;
     this.setState(() => {
       return {
-        messages: require('./data/messages.js'),
+        messages: Messages,
       };
     });
   }
@@ -56,7 +57,7 @@ export default class Example extends React.Component {
       if (this._isMounted === true) {
         this.setState((previousState) => {
           return {
-            messages: GiftedChat.prepend(previousState.messages, require('./data/old_messages.js')),
+            messages: GiftedChat.prepend(previousState.messages, Messages),
             loadEarlier: false,
             isLoadingEarlier: false,
           };
