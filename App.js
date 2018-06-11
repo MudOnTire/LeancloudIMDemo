@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import IM from './src/services/IM';
 import Chat from './src/scenes/Chat';
+import { TextMessage } from 'leancloud-realtime';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' +
@@ -31,10 +32,14 @@ export default class App extends Component<Props> {
       })
       .then((conv) => {
         console.log(conv);
+        const msg = new TextMessage('very important message');
+        conv.send(msg, {
+          receipt: true
+        });
       })
       .catch((error) => {
         console.warn(error);
-      })
+      });
   }
 
   render() {
