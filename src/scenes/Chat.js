@@ -14,6 +14,7 @@ import IM from '../services/IM';
 import { observable } from 'mobx';
 import { observer } from "mobx-react";
 import { TextMessage } from 'leancloud-realtime';
+import { ImageMessage } from "leancloud-realtime-plugin-typed-messages";
 
 @observer
 export default class Example extends React.Component {
@@ -87,11 +88,24 @@ export default class Example extends React.Component {
 
   onSend = (messages = []) => {
     console.log(messages);
-    this.setState((previousState) => {
-      return {
-        messages: GiftedChat.append(previousState.messages, messages),
-      };
-    });
+    if (this._isMounted === true) {
+      if (messages.length > 0) {
+        const msg = messages[0];
+        if (messages[0].text) {
+          this.conv.send(new TextMessage(msg.text))
+            .then(() => {
+              this.setState((previousState) => {
+                return {
+                  messages: GiftedChat.append(previousState.messages, messages),
+                };
+              });
+            })
+            .catch((error) => {
+              console.warn(error);
+            });
+        }
+      }
+    }
 
     // for demo purpose
     this.answerDemo(messages);
