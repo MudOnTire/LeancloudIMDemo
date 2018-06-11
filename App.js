@@ -13,7 +13,6 @@ import {
 } from 'react-native';
 import IM from './src/services/IM';
 import Chat from './src/scenes/Chat';
-import { TextMessage } from 'leancloud-realtime';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' +
@@ -25,17 +24,17 @@ const instructions = Platform.select({
 type Props = {};
 export default class App extends Component<Props> {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      imInited: false
+    }
+  }
+
   componentDidMount() {
     IM.init()
       .then(() => {
-        return IM.createConversation(['bruce']);
-      })
-      .then((conv) => {
-        console.log(conv);
-        const msg = new TextMessage('very important message');
-        conv.send(msg, {
-          receipt: true
-        });
+        this.setState({ 'imInited': true });
       })
       .catch((error) => {
         console.warn(error);
@@ -44,28 +43,14 @@ export default class App extends Component<Props> {
 
   render() {
     return (
-      <View style={styles.container}>
-        <Chat />
+      <View style={{ flex: 1 }}>
+        {
+          this.state.imInited ?
+            <Chat members={['Crixus']} />
+            :
+            null
+        }
       </View>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#ff0000',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-});

@@ -10,8 +10,16 @@ import { GiftedChat, Actions, Bubble, SystemMessage } from 'react-native-gifted-
 import CustomActions from './CustomActions';
 import CustomView from './CustomView';
 import Messages from '../models/messages';
+import IM from '../services/IM';
+import { observable } from 'mobx';
+import { observer } from "mobx-react";
+import { TextMessage } from 'leancloud-realtime';
 
+@observer
 export default class Example extends React.Component {
+
+  @observable conv = null;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -46,6 +54,17 @@ export default class Example extends React.Component {
     this._isMounted = false;
   }
 
+  componentDidMount() {
+    const members = this.props.members;
+    IM.createConversation(members)
+      .then((conv) => {
+        this.conv = conv;
+      })
+      .catch((err) => {
+        console.error('Create conversation failed!!!');
+      });
+  }
+
   onLoadEarlier() {
     this.setState((previousState) => {
       return {
@@ -66,7 +85,8 @@ export default class Example extends React.Component {
     }, 1000); // simulating network
   }
 
-  onSend(messages = []) {
+  onSend = (messages = []) => {
+    console.log(messages);
     this.setState((previousState) => {
       return {
         messages: GiftedChat.append(previousState.messages, messages),
